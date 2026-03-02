@@ -53,7 +53,7 @@
             <button
               class="btn btn-primary btn-sm"
               ng-click="addProduct()"
-              ng-disabled="loading"
+              ng-disabled="loading || !newProduct.name || newProduct.price==null || !newProduct.brand"
             >
               Add
             </button>
