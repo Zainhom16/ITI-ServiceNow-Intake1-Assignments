@@ -43,11 +43,28 @@ app.controller("MyController", function ($scope, ProductService) {
     });
   };
 
-  $scope.updateProduct = function (product) {
+  $scope.editProduct = function (product) {
+    product.isEditing = true;
+    product.tempName = product.name;
+  };
+
+  $scope.cancelEdit = function (product) {
+    product.isEditing = false;
+  };
+
+  $scope.saveEdit = function (product) {
     $scope.loading = true;
-    ProductService.updateProduct(product)
+
+    const updatedData = {
+      name: product.tempName,
+      price: product.price,
+      brand: product.brand,
+    };
+
+    ProductService.updateProduct(product.id, updatedData)
       .then(function () {
-        $scope.Init();
+        product.name = product.tempName;
+        product.isEditing = false;
       })
       .catch(function (error) {
         console.error("Update failed:", error);
@@ -80,8 +97,8 @@ app.service("ProductService", function ($http) {
     return $http.delete(`${SUPABASE_URL}?id=eq.${id}`, { headers: headers });
   };
 
-  this.updateProduct = function (product) {
-    return $http.put(`${SUPABASE_URL}?id=eq.${product.id}`, product, {
+  this.updateProduct = function (id, product) {
+    return $http.patch(`${SUPABASE_URL}?id=eq.${id}`, product, {
       headers: headers,
     });
   };

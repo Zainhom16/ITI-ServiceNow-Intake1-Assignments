@@ -34,7 +34,7 @@
             <input
               type="number"
               ng-model="newProduct.price"
-              placeholder="Price"
+              placeholder="Product Price"
               class="form-control form-control-sm"
               min="0"
             />
@@ -44,7 +44,7 @@
             <input
               type="text"
               ng-model="newProduct.brand"
-              placeholder="Brand"
+              placeholder="Product Brand"
               class="form-control form-control-sm"
             />
           </div>
@@ -78,34 +78,67 @@
             <thead class="table-dark">
               <tr>
                 <th style="width: 8%">#</th>
-                <th>Name</th>
-                <th style="width: 20%">Price</th>
-                <th style="width: 20%">Brand</th>
-                <th style="width: 20%">Edit Name</th>
-                <th style="width: 20%">Remove</th>
+                <th style="width: 30%">Name</th>
+                <th style="width: 15%">Price</th>
+                <th style="width: 15%">Brand</th>
+                <th style="width: 30%">Edit Name</th>
+                <th style="width: 10%">Remove</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr ng-repeat="product in products track by $index">
-                <th scope="row" class="fw-semibold">{{$index + 1}}</th>
+              <tr
+                ng-repeat="product in products | orderBy:'id' track by product.id "
+              >
+                <th scope="row" class="fw-semibold">{{product.id}}</th>
+
                 <td class="fw-medium">{{product.name}}</td>
+
                 <td class="text-success fw-semibold">
                   {{product.price | currency:"EGP "}}
                 </td>
+
                 <td>
-                  <span class="badge bg-secondary px-3 py-2">
-                    {{product.brand | uppercase}}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-warning btn-sm"
-                    ng-click="updateProduct(product)"
+                  <span class="badge bg-secondary px-3 py-2"
+                    >{{product.brand | uppercase}}</span
                   >
-                    Edit
-                  </button>
                 </td>
+
+                <td class="text-center">
+                  <div ng-if="!product.isEditing">
+                    <button
+                      class="btn btn-warning btn-sm"
+                      ng-click="editProduct(product)"
+                    >
+                      Edit
+                    </button>
+                  </div>
+
+                  <div
+                    ng-if="product.isEditing"
+                    class="d-flex gap-2 justify-content-center align-items-center"
+                  >
+                    <input
+                      type="text"
+                      class="form-control form-control-md"
+                      ng-model="product.tempName"
+                      style="min-width: 180px; font-size: 14px"
+                    />
+                    <button
+                      class="btn btn-light btn-sm fs-5"
+                      ng-click="saveEdit(product)"
+                    >
+                      ✅
+                    </button>
+                    <button
+                      class="btn btn-light btn-sm fs-5"
+                      ng-click="cancelEdit(product)"
+                    >
+                      ❌
+                    </button>
+                  </div>
+                </td>
+
                 <td>
                   <button
                     class="btn btn-danger btn-sm"
