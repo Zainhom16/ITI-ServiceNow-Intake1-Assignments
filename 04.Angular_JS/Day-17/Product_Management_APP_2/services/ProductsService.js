@@ -12,6 +12,10 @@ app.service("ProductService", function ($http) {
     return $http.get(SUPABASE_URL, { headers: headers });
   };
 
+  this.getProductById = function (id) {
+    return $http.get(`${SUPABASE_URL}?id=eq.${id}`, { headers: headers });
+  };
+
   this.addProduct = function (product) {
     return $http.post(SUPABASE_URL, product, { headers: headers });
   };

@@ -6,6 +6,10 @@ app.config(function ($routeProvider) {
       templateUrl: "views/products.html",
       controller: "ProductsController",
     })
+    .when("/singleProduct/:id", {
+      templateUrl: "views/singleProduct.html",
+      controller: "ProductsController",
+    })
     .otherwise({
       redirectTo: "/products",
     });
