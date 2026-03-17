@@ -4,8 +4,13 @@ FROM tasks
 JOIN employee USING (emp_id)
 
 -- 2. Rank employees based on their salary (highest salary = rank 1).
-SELECT emp_name, salary, DENSE_RANK() OVER (ORDER BY salary DESC) as salary_rank
-FROM employee
+SELECT emp_name, salary, salary_rank
+FROM (
+    SELECT emp_name, salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employee
+) sub
+WHERE salary_rank = 1;
 
 -- 3. Show the latest task for each employee.
 SELECT emp_name , task_name
